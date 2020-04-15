@@ -21,7 +21,7 @@ print("Keras version:", keras.__version__)
 print("Tensorflow version:", tf.__version__)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data-folder', type=str, dest='data_folder', default="./", , help='data folder mounting point')
+parser.add_argument('--data-folder', type=str, dest='data_folder', default="./", help='data folder mounting point')
 parser.add_argument('--batch-size', type=int, dest='batch_size', default=50, help='mini batch size for training')
 parser.add_argument('--first-layer-neurons', type=int, dest='n_hidden_1', default=100,
                     help='# of neurons in the first layer')
