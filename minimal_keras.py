@@ -19,7 +19,6 @@ print("Keras version:", keras.__version__)
 print("Tensorflow version:", tf.__version__)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data-folder', type=str, dest='data_folder', default="./", help='data folder mounting point')
 parser.add_argument('--batch-size', type=int, dest='batch_size', default=50, help='mini batch size for training')
 parser.add_argument('--first-layer-neurons', type=int, dest='n_hidden_1', default=100,
                     help='# of neurons in the first layer')
@@ -29,7 +28,6 @@ parser.add_argument('--learning-rate', type=float, dest='learning_rate', default
 
 args = parser.parse_args()
 
-data_folder = args.data_folder
 
 import gzip
 import numpy as np
@@ -55,8 +53,20 @@ def load_data(filename, label=False):
 # one-hot encode a 1-D array
 def one_hot_encode(array, num_of_classes):
     return np.eye(num_of_classes)[array.reshape(-1)]
-
+data_folder = './data/mnist'
 print('training dataset is stored here:', data_folder)
+import urllib
+
+os.makedirs('./data/mnist', exist_ok=True)
+
+urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz',
+                           filename='./data/mnist/train-images.gz')
+urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz',
+                           filename='./data/mnist/train-labels.gz')
+urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz',
+                           filename='./data/mnist/test-images.gz')
+urllib.request.urlretrieve('http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz',
+                           filename='./data/mnist/test-labels.gz')
 
 X_train = load_data(os.path.join(data_folder, 'train-images.gz'), False) / 255.0
 X_test = load_data(os.path.join(data_folder, 'test-images.gz'), False) / 255.0
@@ -99,8 +109,7 @@ history = model.fit(X_train, y_train,
                     batch_size=batch_size,
                     epochs=n_epochs,
                     verbose=2,
-                    validation_data=(X_test, y_test),
-                    callbacks=[LogRunMetrics()])
+                    validation_data=(X_test, y_test))
 
 score = model.evaluate(X_test, y_test, verbose=0)
 
@@ -120,6 +129,7 @@ plt.grid(True)
 # serialize NN architecture to JSON
 model_json = model.to_json()
 # save model JSON
+os.makedirs('./outputs/model//mnist', exist_ok=True)
 with open('./outputs/model/model.json', 'w') as f:
     f.write(model_json)
 # save model weights
