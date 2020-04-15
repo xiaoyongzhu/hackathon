@@ -15,8 +15,6 @@ from keras.callbacks import Callback
 
 import tensorflow as tf
 
-from utils import load_data, one_hot_encode
-
 print("Keras version:", keras.__version__)
 print("Tensorflow version:", tf.__version__)
 
