@@ -4,7 +4,7 @@ from tensorflow import keras
 from tensorflow.keras import layers, models
 from tensorflow.keras.models import load_model
 import os
-# print(tf.VERSION)
+print(tf.__version__)
 print(tf.keras.__version__)
 import numpy as np
 import matplotlib.pyplot as plt
